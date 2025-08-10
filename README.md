@@ -21,7 +21,6 @@ A modern, feature-rich Tabata timer application built with React, TypeScript, an
   - Rest periods end (next exercise starting)
   - Round rest ends (next round starting)
 - **Inspiring Completion Fanfare**: Triumphant 8-note melody when workout completes
-- **Test Audio Button**: Verify audio functionality before starting
 
 ### ⚙️ Workout Management
 - **Custom Workouts**: Create, edit, and delete personalized workout routines
@@ -101,9 +100,8 @@ The built files will be in the `dist/` directory.
 The app provides audio feedback during workouts:
 - **Warning Beeps**: 3 beeps (1 per second) before each phase ends
 - **Completion Sound**: Celebratory fanfare when workout is complete
-- **Test Audio Button**: Click to verify sound works before starting
 
-*Note: Click "Test Audio" on first use - browsers require user interaction to enable sound.*
+*Note: Audio will start automatically when you begin your first workout.*
 
 ## 🚀 Getting Started
 
@@ -121,10 +119,9 @@ npm run build
 ## 📱 How to Use
 
 1. **Select a Workout**: Choose from existing workouts or create a new one
-2. **Test Audio**: Click "🔊 Test Audio" to verify sound works  
-3. **Start Timer**: Click "Start Workout" when ready
-4. **Follow Audio Cues**: Listen for beeps and follow on-screen instructions
-5. **Use Controls**: Pause/resume as needed during your workout
+2. **Start Timer**: Click "Start Workout" when ready
+3. **Follow Audio Cues**: Listen for beeps and follow on-screen instructions
+4. **Use Controls**: Pause/resume as needed during your workout
 
 ## 🎯 What is Tabata?
 

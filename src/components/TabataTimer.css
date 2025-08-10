@@ -146,20 +146,6 @@
   box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
 
-.control-button.test-audio {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
-  min-width: 150px;
-}
-
-.control-button.test-audio:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
-}
-
 .control-buttons-group {
   display: flex;
   gap: 1rem;

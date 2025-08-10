@@ -208,8 +208,8 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
                 } else {
                   // No rest, go directly to next exercise
                   console.log('Exercise complete, starting next exercise (no rest)')
-                  setCurrentExercise(prev => prev + 1)
                   setTimerState('exercise')
+                  setCurrentExercise(prev => prev + 1)
                   return workout.exerciseDuration
                 }
               } else {
@@ -361,35 +361,9 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
 
       <div className="timer-controls">
         {timerState === 'stopped' || timerState === 'ready' ? (
-          <>
-            <button className="control-button start" onClick={startTimer}>
-              {timerState === 'ready' ? 'Start Exercise' : 'Start Workout'}
-            </button>
-            {timerState === 'stopped' && (
-              <button className="control-button test-audio" onClick={async () => {
-                try {
-                  initializeAudio()
-                  
-                  // Ensure audio context is running before playing sound
-                  if (audioContextRef.current) {
-                    await audioContextRef.current.resume()
-                    console.log('Audio context state:', audioContextRef.current.state)
-                  }
-                  
-                  // Small delay to ensure audio context is ready
-                  setTimeout(() => {
-                    console.log('Playing test beeps...')
-                    playCountdownBeeps()
-                  }, 200)
-                } catch (error) {
-                  console.error('Audio test failed:', error)
-                  alert('Audio test failed. Please check your browser settings and ensure audio is enabled.')
-                }
-              }}>
-                🔊 Test Audio
-              </button>
-            )}
-          </>
+          <button className="control-button start" onClick={startTimer}>
+            {timerState === 'ready' ? 'Start Exercise' : 'Start Workout'}
+          </button>
         ) : timerState === 'paused' ? (
           <div className="control-buttons-group">
             <button className="control-button resume" onClick={resumeTimer}>
