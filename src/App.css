@@ -1,0 +1,22 @@
+/* App Styles */
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #bfdbfe 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  min-height: 100vh;
+}
+
+/* Global button styles */
+button {
+  font-family: inherit;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+  }
+}
