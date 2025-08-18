@@ -17,6 +17,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
   const [previousState, setPreviousState] = useState<TimerState>('exercise') // Track state before pausing
   const intervalRef = useRef<number | null>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null)
 
   // Initialize audio context
   useEffect(() => {
@@ -24,6 +25,10 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
     return () => {
       if (audioContextRef.current) {
         audioContextRef.current.close()
+      }
+      // Release wake lock when component unmounts
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release()
       }
     }
   }, [])
@@ -44,6 +49,32 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
       } catch (error) {
         console.warn('Audio not supported:', error)
       }
+    }
+  }
+
+  // Request wake lock to prevent screen from sleeping during workout
+  const requestWakeLock = async () => {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLockRef.current = await navigator.wakeLock.request('screen')
+        console.log('Wake lock acquired - screen will stay on during workout')
+        
+        wakeLockRef.current.addEventListener('release', () => {
+          console.log('Wake lock released')
+        })
+      } else {
+        console.log('Wake Lock API not supported')
+      }
+    } catch (error) {
+      console.warn('Failed to request wake lock:', error)
+    }
+  }
+
+  // Release wake lock
+  const releaseWakeLock = () => {
+    if (wakeLockRef.current) {
+      wakeLockRef.current.release()
+      wakeLockRef.current = null
     }
   }
 
@@ -147,6 +178,9 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
     // Initialize audio on first user interaction
     initializeAudio()
     
+    // Request wake lock to keep screen on during workout
+    requestWakeLock()
+    
     if (timerState === 'stopped') {
       setTimerState('ready')
       setCurrentRound(1)
@@ -179,6 +213,10 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
+    
+    // Release wake lock when stopping
+    releaseWakeLock()
+    
     setTimerState('stopped')
     setCurrentRound(1)
     setCurrentExercise(1)
@@ -232,6 +270,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
                   console.log('All rounds complete!')
                   setTimerState('completed')
                   playCompletionSound()
+                  releaseWakeLock() // Release wake lock when workout completes
                   return 0
                 }
               }
@@ -348,7 +387,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
               className="progress-circle"
             />
           </svg>
-          <div className="timer-content">
+          <div className={`timer-content ${timerState === 'exercise' ? 'pulse-animation' : ''}`}>
             <div className="state-text" style={{ color: getStateColor() }}>
               {getStateText()}
             </div>

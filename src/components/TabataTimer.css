@@ -185,7 +185,13 @@
   }
 }
 
-.timer-content {
+/* Remove default animation from timer-content */
+/* .timer-content {
+  animation: pulse 1s ease-in-out infinite;
+} */
+
+/* Add pulse animation only during exercise */
+.pulse-animation {
   animation: pulse 1s ease-in-out infinite;
 }
 
