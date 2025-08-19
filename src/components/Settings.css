@@ -2,6 +2,25 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  position: relative;
+}
+
+.settings::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 40px;
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 0 3px 3px 0;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.settings:hover::before {
+  opacity: 1;
 }
 
 .settings-header {
@@ -133,6 +152,25 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
+  position: relative;
+}
+
+.workout-editor::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 40px;
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 0 3px 3px 0;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.workout-editor:hover::before {
+  opacity: 1;
 }
 
 .editor-header h2 {
@@ -247,5 +285,10 @@
   
   .details-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .settings::before,
+  .workout-editor::before {
+    opacity: 0.8;
   }
 }

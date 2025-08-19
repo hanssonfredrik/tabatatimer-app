@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { Workout } from '../types'
+import { useSwipeBack } from '../hooks/useSwipeBack'
 import './Settings.css'
 
 interface SettingsProps {
@@ -10,6 +11,9 @@ const Settings = ({ onBack }: SettingsProps) => {
   const [workouts, setWorkouts] = useState<Workout[]>([])
   const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  
+  // Add swipe back gesture support
+  const swipeContainerRef = useSwipeBack({ onSwipeBack: onBack })
 
   useEffect(() => {
     const savedWorkouts = localStorage.getItem('tabata-workouts')
@@ -82,7 +86,7 @@ const Settings = ({ onBack }: SettingsProps) => {
   }
 
   return (
-    <div className="settings">
+    <div className="settings" ref={swipeContainerRef}>
       <div className="settings-header">
         <button className="back-button" onClick={onBack}>
           ‹ Back
@@ -129,6 +133,9 @@ interface WorkoutEditorProps {
 
 const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorProps) => {
   const [formData, setFormData] = useState(workout)
+  
+  // Add swipe back gesture support
+  const swipeContainerRef = useSwipeBack({ onSwipeBack: onCancel })
 
   const handleChange = (field: keyof Workout, value: string | number) => {
     setFormData(prev => ({
@@ -176,7 +183,7 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
   }
 
   return (
-    <div className="workout-editor">
+    <div className="workout-editor" ref={swipeContainerRef}>
       <div className="editor-header">
         <h2>{isCreating ? 'Create' : 'Edit'} Workout</h2>
       </div>

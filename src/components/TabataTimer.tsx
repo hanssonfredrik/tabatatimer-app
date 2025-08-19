@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { Workout, TimerState } from '../types'
+import { useSwipeBack } from '../hooks/useSwipeBack'
 import './TabataTimer.css'
 
 interface TabataTimerProps {
@@ -19,6 +20,9 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
   const intervalRef = useRef<number | null>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
   const wakeLockRef = useRef<WakeLockSentinel | null>(null)
+  
+  // Add swipe back gesture support
+  const swipeContainerRef = useSwipeBack({ onSwipeBack: onBack })
 
   // Initialize audio context
   useEffect(() => {
@@ -361,7 +365,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
   }
 
   return (
-    <div className="tabata-timer">
+    <div className="tabata-timer" ref={swipeContainerRef}>
       <div className="timer-header">
         <button className="back-button" onClick={onBack}>
           ‹ Back
