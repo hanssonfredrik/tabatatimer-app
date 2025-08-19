@@ -63,6 +63,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  width: 100%;
 }
 
 .settings-button:hover {

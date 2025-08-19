@@ -47,8 +47,11 @@ const Settings = ({ onBack }: SettingsProps) => {
       alert('You must have at least one workout!')
       return
     }
-    const newWorkouts = workouts.filter(w => w.id !== id)
-    saveWorkouts(newWorkouts)
+    
+    if (confirm('Are you sure you want to delete the selected workout?')) {
+      const newWorkouts = workouts.filter(w => w.id !== id)
+      saveWorkouts(newWorkouts)
+    }
   }
 
   const saveWorkout = (workout: Workout) => {
@@ -82,7 +85,7 @@ const Settings = ({ onBack }: SettingsProps) => {
     <div className="settings">
       <div className="settings-header">
         <button className="back-button" onClick={onBack}>
-          ← Back
+          ‹ Back
         </button>
         <h2>Manage Workouts</h2>
       </div>
@@ -134,13 +137,42 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
     }))
   }
 
+  const handleNumberChange = (field: keyof Workout, value: string) => {
+    if (value === '') {
+      // Allow empty string temporarily for editing
+      setFormData(prev => ({
+        ...prev,
+        [field]: '' as any
+      }))
+    } else {
+      const num = parseInt(value)
+      if (!isNaN(num)) {
+        setFormData(prev => ({
+          ...prev,
+          [field]: num
+        }))
+      }
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.name.trim()) {
       alert('Please enter a workout name')
       return
     }
-    onSave(formData)
+    
+    // Ensure all numeric fields have valid values
+    const validatedData: Workout = {
+      ...formData,
+      exerciseDuration: formData.exerciseDuration || 20,
+      restDuration: formData.restDuration || 10,
+      exerciseCount: formData.exerciseCount || 8,
+      roundCount: formData.roundCount || 1,
+      roundRestDuration: formData.roundRestDuration || 60
+    }
+    
+    onSave(validatedData)
   }
 
   return (
@@ -170,7 +202,7 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
               min="1"
               max="180"
               value={formData.exerciseDuration}
-              onChange={(e) => handleChange('exerciseDuration', parseInt(e.target.value) || 1)}
+              onChange={(e) => handleNumberChange('exerciseDuration', e.target.value)}
             />
           </div>
 
@@ -182,7 +214,7 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
               min="0"
               max="60"
               value={formData.restDuration}
-              onChange={(e) => handleChange('restDuration', parseInt(e.target.value) || 0)}
+              onChange={(e) => handleNumberChange('restDuration', e.target.value)}
             />
           </div>
         </div>
@@ -196,7 +228,7 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
               min="1"
               max="20"
               value={formData.exerciseCount}
-              onChange={(e) => handleChange('exerciseCount', parseInt(e.target.value) || 1)}
+              onChange={(e) => handleNumberChange('exerciseCount', e.target.value)}
             />
           </div>
 
@@ -208,7 +240,7 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
               min="1"
               max="25"
               value={formData.roundCount}
-              onChange={(e) => handleChange('roundCount', parseInt(e.target.value) || 1)}
+              onChange={(e) => handleNumberChange('roundCount', e.target.value)}
             />
           </div>
         </div>
@@ -221,7 +253,7 @@ const WorkoutEditor = ({ workout, isCreating, onSave, onCancel }: WorkoutEditorP
             min="0"
             max="180"
             value={formData.roundRestDuration}
-            onChange={(e) => handleChange('roundRestDuration', parseInt(e.target.value) || 0)}
+            onChange={(e) => handleNumberChange('roundRestDuration', e.target.value)}
           />
         </div>
 

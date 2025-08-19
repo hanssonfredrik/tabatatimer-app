@@ -15,6 +15,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
   const [timeRemaining, setTimeRemaining] = useState(0)
   const [totalTime, setTotalTime] = useState(0)
   const [previousState, setPreviousState] = useState<TimerState>('exercise') // Track state before pausing
+  const [pausedTimeRemaining, setPausedTimeRemaining] = useState<number | null>(null) // Store time when paused
   const intervalRef = useRef<number | null>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
   const wakeLockRef = useRef<WakeLockSentinel | null>(null)
@@ -153,6 +154,13 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
 
   // Initialize timer based on current state
   const initializeTimer = () => {
+    // If we're resuming from a pause, use the stored time
+    if (pausedTimeRemaining !== null) {
+      setTimeRemaining(pausedTimeRemaining)
+      setPausedTimeRemaining(null) // Clear the stored time
+      return
+    }
+    
     switch (timerState) {
       case 'exercise':
         setTimeRemaining(workout.exerciseDuration)
@@ -197,6 +205,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
       intervalRef.current = null
     }
     setPreviousState(timerState)
+    setPausedTimeRemaining(timeRemaining) // Store the remaining time
     setTimerState('paused')
   }
 
@@ -204,6 +213,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
     if (timerState === 'paused') {
       // Resume to the previous state
       setTimerState(previousState)
+      // Don't clear pausedTimeRemaining here - let the useEffect handle it
     }
   }
 
@@ -216,6 +226,9 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
     
     // Release wake lock when stopping
     releaseWakeLock()
+    
+    // Clear any paused time
+    setPausedTimeRemaining(null)
     
     setTimerState('stopped')
     setCurrentRound(1)
@@ -351,7 +364,7 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
     <div className="tabata-timer">
       <div className="timer-header">
         <button className="back-button" onClick={onBack}>
-          ← Back
+          ‹ Back
         </button>
         <div className="workout-info">
           <h2>{workout.name}</h2>
@@ -406,10 +419,10 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
         ) : timerState === 'paused' ? (
           <div className="control-buttons-group">
             <button className="control-button resume" onClick={resumeTimer}>
-              ▶️ Resume
+              Resume
             </button>
             <button className="control-button stop" onClick={stopTimer}>
-              ⏹️ Stop
+              Stop
             </button>
           </div>
         ) : timerState === 'completed' ? (
@@ -423,10 +436,10 @@ const TabataTimer = ({ workout, onBack, timerState, setTimerState }: TabataTimer
         ) : (
           <div className="control-buttons-group">
             <button className="control-button pause" onClick={pauseTimer}>
-              ⏸️ Pause
+              Pause
             </button>
             <button className="control-button stop" onClick={stopTimer}>
-              ⏹️ Stop
+              Stop
             </button>
           </div>
         )}

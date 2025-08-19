@@ -16,18 +16,22 @@
 }
 
 .back-button {
-  background: #6b7280;
-  color: white;
+  background: transparent;
+  color: #3b82f6;
   border: none;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .back-button:hover {
-  background: #4b5563;
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .workout-info h2 {
