@@ -2,6 +2,10 @@
 
 A modern, feature-rich Tabata timer application built with React, TypeScript, and Vite. Perfect for high-intensity interval training (HIIT) workouts with customizable routines, audio feedback, and an inspiring blue-themed design.
 
+## 🌐 Live Demo
+
+**Try it now: [https://yellow-smoke-0dac6c003.2.azurestaticapps.net/](https://yellow-smoke-0dac6c003.2.azurestaticapps.net/)**
+
 ![Tabata Timer](https://img.shields.io/badge/React-19+-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue?logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-7+-purple?logo=vite)
